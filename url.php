@@ -1,4 +1,5 @@
 <?PHP
+//ini_set('display_errors', "On");
 $URL = $_POST["url"];
 if (preg_match("/(https:\/\/docs\.google\.com\/forms\/)/",$URL)) {
 
@@ -58,30 +59,24 @@ function actionurl($str){
     <div class="uk-card-body">
         <form class="uk-form-horizontal uk-margin-large" action="<?=actionurl($URL)?>" uk-margin>
             <p><span class="uk-text-danger text-danger">*</span>：必須</p>
-            <?php
-            $row = 1;
-            while($row < count($keywords_copy)){
-                if($keywords[$row][3] == "0"){
-                    echo("\n");
-                    ?>
+            <?php $row=1; while($row < count($keywords_copy)): ?>
+                <?php if($keywords[$row][3] == "0"): ?>
                     <div class="row my-4">
                         <label class="uk-form-label col-md-2" for="content-<?php echo($row); ?>"><?=rees($keywords[$row][1])?><?php if($keywords[$row + 1][2] == "1") echo(' <span class="uk-text-danger text-danger">*</span>'); ?></label>
                         <div class="uk-form-controls col-md-10">
-                            <input class="uk-input form-control" id="content-<?php echo($row); ?>" type="text" placeholder="<?=rees($keywords[$row][1]) ?><?php $row++;?>" name="entry.<?=rees($keywords[$row][0])?>" <?php if($keywords[$row][2] == "1")echo("required"); ?>>
+                            <input class="uk-input form-control" id="content-<?php echo($row); ?>" type="text" placeholder="<?=rees($keywords[$row][1]) ?>" name="entry.<?=rees($keywords[$row + 1][0])?>" <?php if($keywords[$row + 1][2] == "1")echo("required"); ?>>
                         </div>
-                    </div><?php
-                }else if($keywords[$row][3] == "1"){
-                    echo("\n");
-                    ?>
+                    </div>
+                    <?php $row ++; ?>
+                <?php elseif($keywords[$row][3] == "1"): ?>
                     <div class="row my-4">
                         <label class="uk-form-label col-md-2" for="content-<?php echo($row); ?>"><?=rees($keywords[$row][1])?><?php if($keywords[$row + 1][2] == "1") echo(' <span class="uk-text-danger text-danger">*</span>'); ?></label>
                         <div class="uk-form-controls col-md-10">
-                            <textarea class="uk-textarea form-control" id="content-<?php echo($row); ?>" rows="3" placeholder="<?=rees($keywords[$row][1]) ?><?php $row++;?>" name="entry.<?=rees($keywords[$row][0])?>" <?php if($keywords[$row][2] == "1")echo("required"); ?>></textarea>
+                            <textarea class="uk-textarea form-control" id="content-<?php echo($row); ?>" rows="3" placeholder="<?=rees($keywords[$row][1]) ?>" name="entry.<?=rees($keywords[$row + 1][0])?>" <?php if($keywords[$row + 1][2] == "1")echo("required"); ?>></textarea>
                         </div>
-                    </div><?php
-                }else if($keywords[$row][3] == "2"){
-                    echo("\n");
-                    ?>
+                    </div>
+                    <?php $row ++; ?>
+                <?php elseif($keywords[$row][3] == "2"): ?>
                     <div class="row my-4">
                         <label class="uk-form-label col-md-2" for="content-<?php echo($row); ?>"><?=rees($keywords[$row][1])?><?php if($keywords[$row + 1][2] == "1") echo(' <span class="uk-text-danger text-danger">*</span>'); ?></label>
                         <div class="uk-form-controls col-md-10">
@@ -90,26 +85,32 @@ function actionurl($str){
                                 <?php 
                                 $row++;
                                 $col = 0;
-                                while($col < count($keywords[$row])){
-                                    if(!(empty($keywords[$row][$col])) && $keywords[$row][$col] != "null"){
-                                    ?><option value="<?=rees($keywords[$row][$col]) ?>"><?=rees($keywords[$row][$col]) ?></option><?php
-                                    }
+                                while($col < count($keywords[$row])):
+                                    if(!(empty($keywords[$row][$col])) && $keywords[$row][$col] != "null"): ?>
+                                        <option value="<?=rees($keywords[$row][$col]) ?>"><?=rees($keywords[$row][$col]) ?></option>
+                                    <?php endif;
                                     $col += 5;
-                                }?>
+                                endwhile; ?>
                             </select>
                         </div>
-                    </div><?php
-                }
-                $row++;
-            }
-            echo("\n");
-            ?>
+                    </div>
+                <?php endif;
+                $row++; ?>
+            <?php endwhile; ?>
         <button type="submit" class="uk-button uk-button-primary btn btn-primary my-2">送信</button>
         <p class="uk-text-muted text-black-50">Created by Rikuya using Google Forms.This is not created or endorsed by Google.  <a href="https://policies.google.com/terms">利用規約</a> / <a href="https://policies.google.com/privacy">プライバシーポリシー</a></p>
         </form>
     </div>
 </div>
+<br>
+<div class="uk-card uk-card-hover uk-card-default uk-card-body">
 
+<?php for ($i = 0 ; $i < count($keywords); $i++){
+        var_dump($keywords[$i]);
+?>  <br>  <?php
+    }
+    ?>
+</div>
 <br>
 <div class="uk-card uk-card-hover uk-card-default uk-card-body">
     <p>気に入りましたか？</p>
